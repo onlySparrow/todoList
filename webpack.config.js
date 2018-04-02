@@ -1,75 +1,81 @@
-const path = require('path')
-const webpack = require('webpack')
-const uglify = require('uglifyjs-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-function resolve(dir) {
-  return path.join(__dirname, '..', dir)
-}
+var path = require('path')
+var webpack = require('webpack')
 
 module.exports = {
-  devtool: 'source-map',
-  entry: './src/index.js',//入口文件  
+  entry: './src/main.js',
   output: {
-    path: path.resolve(__dirname, './dist'),//输出路径
+    path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'vue-todolist.min.js',
+    filename: 'build.js',
+    library: 'vueTodoList',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
   module: {
-    rules: [{
-      test: /\.vue$/,
-      loader: 'vue-loader'
-    },
-    {
-      test: /\.less$/,
-      use: [
-        { loader: 'style-loader' },
-        { loader: 'css-loader' },
-        { loader: 'less-loader' }
-      ]
-    },
-    {
-      test: /\.js$/,
-      loader: 'babel-loader',
-      include: [resolve('src'), resolve('test')]
-    },
-    {
-      test: /\.(png|jpg|gif|ttf|svg|woff|eot)$/,
-      loader: 'url-loader',
-      query: {
-        limit: 10000,
-        name: '[name].[ext]?[hash]'
-      }
-    }
-    ]
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    new uglify(
+    rules: [
       {
-        uglifyOptions: {
-          output: {
-            beautify: false,
-            comments: false
-          },
-          compress: {
-            warnings: false,
-            drop_console: true,
-            drop_debugger: true
-          },
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ],
+      },      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {
+          }
+          // other vue-loader options go here
+        }
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]?[hash]'
         }
       }
-    ),
-    new HtmlWebpackPlugin({
-      inject: true,
-      // filename: path.join(__dirname, '../examples/dist/index.html'),
-      template: path.join(__dirname, '../examples/index.html')
+    ]
+  },
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js'
+    },
+    extensions: ['*', '.js', '.vue', '.json']
+  },
+  devServer: {
+    historyApiFallback: true,
+    noInfo: true,
+    overlay: true
+  },
+  performance: {
+    hints: false
+  },
+  devtool: '#eval-source-map'
+}
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports.devtool = '#source-map'
+  // http://vue-loader.vuejs.org/en/workflow/production.html
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
     })
-  ]
-};  
+  ])
+}
