@@ -14,13 +14,9 @@ npm run dev
 # build for production with minification
 npm run build
 ```
-[TOC]
-
 ### 前言
 
-最近几个人合作完成了一个项目，发现有一些公用的基础业务组件，可以提取出来，不仅方便大家在各自模块直接引用，也可以在以后的项目中使用。想到了可不可以自己动手把组件打包发布到内部的npm上，避免以后小伙伴们的重复工作呢？于是乎，说干就干，在这里操练一下，写个todo-list的vue组件案例。
-
-
+最近几个人合作完成了一个项目，发现有一些公用的基础业务组件，可以提取出来，不仅方便大家在各自模块直接引用，也可以在以后的项目中使用。想到了可不可以自己动手把组件打包发布到内部的npm上，避免以后小伙伴们的重复工作呢？于是乎，说干就干，在这里操练一下，写个todo-list的vue组件案例。案例源码：https://github.com/wuwhs/todoList
 
 ### 建立npm项目
 
@@ -521,6 +517,7 @@ export default {
 }
 </script>
 ```
+
 再改回测试案例入口，刷新浏览器，报错！
 
 ```
@@ -574,14 +571,27 @@ yarn-error.log
 更改一下`package.json`的`version`，执行`npm publish`即可
 
 ```
-MINGW32 /d/appSoft/wampserver/wamp64/www/todoList (master)
 $ npm publish
 + vue-todolist@1.0.3
 ```
 
 #### 使用npm组件包
 
-发布成功后，这就是一个平常使用的插件了，`npm install vue-todolist --save-dev`即可安装完成，直接在页面中引入使用。
+发布成功后，这就是一个平常使用的插件了，`cnpm install vue-todolist --save`即可安装（使用npm或cnpm安装均可）完成，
+
+```
+$ cnpm install vue-todolist --save
+√ Installed 1 packages
+√ Linked 1 latest versions
+√ Run 0 scripts
+Recently updated (since 2018-03-27): 1 packages (detail see file D:\appSoft\wampserver\wamp64\www\todoList\node_modules\.recently_updates.txt)
+  Today:
+    → vue-todolist@*(1.0.3) (11:15:22)
+√ All packages installed (1 packages installed from npm registry, used 564ms, speed 528.68kB/s, json 2(281.56kB), tarball 16.62kB)
+
+```
+
+然后直接在页面中引入使用。
 
 在App.vue引入todolist组件，就不需要引入本地写的了，直接引入刚才安装好的
 
