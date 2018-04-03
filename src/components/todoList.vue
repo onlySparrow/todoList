@@ -1,5 +1,5 @@
 <template>
-<div id="todo-list-example">
+<div>
   <input
     v-model="newTodoText"
     v-on:keyup.enter="addNewTodo"

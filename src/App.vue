@@ -12,10 +12,6 @@ export default {
   name: 'app',
   components: {
     TodoList
-  },
-  data () {
-    return {
-    }
   }
 }
 </script>
