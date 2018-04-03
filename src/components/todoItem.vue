@@ -7,11 +7,6 @@
 
 <script>
 export default {
-  props: ['title'],
-  data () {
-    return {
-
-    }
-  }
+  props: ['title']
 }
 </script>
